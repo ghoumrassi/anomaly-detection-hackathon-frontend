@@ -7,7 +7,7 @@
         width="25%">
     <br>
     <form id="entryForm" action="/uploader" method="POST" enctype="multipart/form-data">
-        <label class="form-label" for="customFile">File Example</label>
+        <label class="form-label" for="customFile" style="font-size: 32px; color:rgb(196, 196, 196);">Input data file:</label>
         <input type="file" class="form-control" id="customFile" name="fileupload" />
         <br>
         {% if error is defined %}
@@ -18,7 +18,7 @@
         <div class="container-sm w-25">
             <button class="w-100 btn btn-lg btn-primary" id="predictButton">Predict</button>
         </div>
-        <p class="mt-5 mb-3 text-muted">2021</p>
+        <p class="mt-5 mb-3" style="font-size: 16px; color:rgb(196, 196, 196);">2021</p>
     </form>
 </div>
 

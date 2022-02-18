@@ -1,5 +1,9 @@
 import pandas as pd
 from io import BytesIO
+from google.cloud import bigquery
+import time
+import datetime
+import pytz
 
 
 def validate_file(file_string, filename):
@@ -48,8 +52,20 @@ def validate_file(file_string, filename):
         return False, 'Column "type" must be either "CASH_IN", "CASH_OUT", "DEBIT", "PAYMENT", "TRANSFER"'
 
     return True, ''
-        
+
+
+def get_bigquery_newdata():
+    client = bigquery.Client.from_service_account_json('keys/anomaly-detection-hackathon-a1de2720418b.json')
+    timestamp = datetime.datetime.now(pytz.utc)
+    while True:
+        time.sleep(5)
+        table = client.get_table('model_output.fraud_model_output_table')
+        bq_timestamp = table.modified
+        if (timestamp < bq_timestamp):
+            return
+        print('not yet')
+
 
 
 if __name__ == '__main__':
-    print(validate_file('uploads/test.csv'))
+    print(get_bigquery_lastupdate())

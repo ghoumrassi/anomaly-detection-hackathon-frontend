@@ -1,10 +1,10 @@
-from flask import Flask, render_template, request, redirect, session
+from flask import Flask, render_template, request, redirect, session, url_for
 from werkzeug.utils import secure_filename
 import os
 import json
 from google.cloud import storage
 from oauth2client.service_account import ServiceAccountCredentials
-from helpers import validate_file
+from helpers import validate_file, get_bigquery_newdata
 from random import randint
 
 
@@ -30,6 +30,10 @@ def homepage():
 def dashboard():
     return render_template('dashboard.html')
 
+@app.route("/loading")
+def loading():
+    return render_template('loading.html')
+
 @app.route("/about")
 def about():
     return render_template('about.html')
@@ -41,6 +45,12 @@ def sampletext():
 @app.route('/test')
 def test_env():
     return render_template('test.html')
+
+@app.route('/check_bq', methods=['GET', 'POST'])
+def check_bq():
+    get_bigquery_newdata()
+    print("it workedddd!")
+    return 'done'
 
 @app.route('/uploader', methods=['GET', 'POST'])
 def upload_file():
@@ -62,7 +72,7 @@ def upload_file():
         blob = bucket.blob('upload/' + str(sess_id) + '.csv')
         blob.upload_from_string(file_content)
 
-        return redirect('/dashboard')
+        return redirect('/loading')
 
 
 if __name__ == "__main__":

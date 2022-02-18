@@ -96,6 +96,9 @@
         </div>
     </div>          
 </div>
+<div class="alert alert-warning new-data-alert" id="newdataalert" role="alert">
+    New data is available in the dashboard. Refresh the page to update,
+</div>
 <iframe width="80%" height="600" src="https://datastudio.google.com/embed/reporting/06e5da90-00d7-44a4-9621-f98005ab8ef2/page/p_j4wapg89rc" frameborder="0" style="border:0" allowfullscreen></iframe>
 <script>
     // Create event listener
@@ -122,6 +125,19 @@
     }
 
 
+</script>
+<script>
+    $('#newdataalert').hide()
+
+    var output = $.ajax({
+        type: "POST",
+        url: "check_bq",
+    }).done(function( o ) {
+        $('#newdataalert').show()
+
+    });
+
+    
 </script>
 
 {% endblock content %}
