@@ -8,10 +8,6 @@ from helpers import validate_file
 
 
 app = Flask(__name__)
-UPLOAD_FOLDER = os.path.join(app.root_path, 'uploads')
-if not os.path.exists(UPLOAD_FOLDER):
-    os.makedirs(UPLOAD_FOLDER)
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER 
 
 with open('keys/anomaly-detection-hackathon-a1de2720418b.json', 'r') as f:
     credentials_dict = json.load(f)
