@@ -1,0 +1,127 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<style>
+    iframe {
+        width: 80%;
+        height: 800;
+        margin: 0 auto;
+        background-color: rgb(233, 233, 233);
+        display: block;
+    }
+    #dataStudioFrame{
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        min-height: 100vh;
+    }
+    
+    #overlay {
+        position: fixed;
+        display: none;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0,0,0,0.5);
+        z-index: 2;
+        cursor: pointer;
+    }
+    /* #overlay {
+        display: grid;
+        grid-template-columns: repeat(auto-fit,minmax(250px,1fr));
+        grid-auto-rows: 130px;
+        place-items:center;
+    } */
+
+    .dots-bars-4 {
+    width: 40px;
+    height: 20px;
+    --c:radial-gradient(farthest-side,currentColor 93%,#0000);
+    background:
+    var(--c) 0    0,
+    var(--c) 50%  0,
+    var(--c) 100% 0;
+    background-size:8px 8px;
+    background-repeat: no-repeat;
+    /* position: relative; */
+    animation: db4-0 1s linear infinite alternate;
+    position: fixed;
+    top:-100%; right:-100%; left:-100%; bottom:-100%;
+    margin:auto;
+    z-index:0;
+    }
+    .dots-bars-4:before {
+        content: "";
+        position: absolute;
+        width: 8px;
+        height: 12px;
+        background:currentColor;
+        left:0;
+        top:0;
+        animation: 
+        db4-1 1s  linear infinite alternate,
+        db4-2 0.5s cubic-bezier(0,200,.8,200) infinite;
+    }
+    
+    @keyframes db4-0 {
+        0%      {background-position: 0  100%,50% 0   ,100% 0}
+        8%,42%  {background-position: 0  0   ,50% 0   ,100% 0}
+        50%     {background-position: 0  0   ,50% 100%,100% 0}
+        58%,92% {background-position: 0  0   ,50% 0   ,100% 0}
+        100%    {background-position: 0  0   ,50% 0   ,100% 100%}
+    }
+    
+    @keyframes db4-1 {
+        100% {left:calc(100% - 8px)}
+    }
+    
+    @keyframes db4-2 {
+        100% {top:-0.1px}
+    }
+    
+
+    
+    
+    /* * {
+        box-sizing: border-box;
+    } */
+</style>  
+<div class="h-100 row align-items-center justify-content-center" id="overlay">
+    <div class="jumbotron d-flex align-items-center min-vh-100">
+        <div class="container text-center">
+            <iframe id="dataStudioFrame" width="800" height="600" src="https://datastudio.google.com/embed/reporting/06e5da90-00d7-44a4-9621-f98005ab8ef2/page/p_j4wapg89rc" frameborder="0" style="border:0" allowfullscreen></iframe>
+        </div>
+    </div>          
+</div>
+<iframe width="80%" height="600" src="https://datastudio.google.com/embed/reporting/06e5da90-00d7-44a4-9621-f98005ab8ef2/page/p_j4wapg89rc" frameborder="0" style="border:0" allowfullscreen></iframe>
+<script>
+    // Create event listener
+    document.getElementById('predictButton').addEventListener('click', loadPrediction);
+
+    function loadPrediction(){
+        let formData = new FormData();
+        formData.append("file", fileupload.files[0]);
+        await fetch('/upload.php', {method: 'POST', body: formData});
+
+        document.getElementById("overlay").style.display = "block";
+        var xhr = new XMLHttpRequest();
+        // Open (type, url, async)
+        
+        xhr.open('GET', 'sample_text', true)
+        xhr.onload = function(){
+            if(this.status == 200){
+                document.getElementById('predictionHeader').innerHTML = 'Predictions'
+                document.getElementById('predictionBody').innerHTML = this.responseText
+            }
+        }
+        
+        xhr.send()
+    }
+
+
+</script>
+
+{% endblock content %}
